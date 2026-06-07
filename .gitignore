@@ -11,6 +11,10 @@
 npm-debug.log
 yarn-error.log
 
+# Environnements locaux
+.env
+.env.local
+
 # IDEs and editors
 .idea/
 .project

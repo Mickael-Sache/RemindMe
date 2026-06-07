@@ -1,0 +1,58 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 1rem 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 0 24px 24px 0;
+  margin-right: 0.75rem;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+
+  mat-icon {
+    font-size: 22px;
+  }
+
+  .nav-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-primary);
+  }
+
+  &.active {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--color-primary);
+    }
+  }
+}

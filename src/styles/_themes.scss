@@ -1,0 +1,32 @@
+@use '@angular/material' as mat;
+
+// Color palette
+$primary-palette: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+      tertiary: mat.$blue-palette,
+    ),
+  )
+);
+
+$dark-palette: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$violet-palette,
+      tertiary: mat.$blue-palette,
+    ),
+  )
+);
+
+body.theme-light {
+  @include mat.all-component-colors($primary-palette);
+  @include mat.color-variants-backwards-compatibility($primary-palette);
+}
+
+body.theme-dark {
+  @include mat.all-component-colors($dark-palette);
+  @include mat.color-variants-backwards-compatibility($dark-palette);
+}

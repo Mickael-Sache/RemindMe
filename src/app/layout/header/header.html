@@ -1,1 +1,37 @@
-<p>header works!</p>
+<header class="app-header">
+  <!-- Logo RemindMe -->
+  <a routerLink="/dashboard" class="logo" aria-label="Accueil RemindMe">
+    <mat-icon>schedule</mat-icon>
+    <span class="logo-text">RemindMe</span>
+  </a>
+  <!-- SearchBar -->
+  <div class="search-bar" role="search">
+    <mat-icon>search</mat-icon>
+    <input type="search" placeholder="Rechercher une activité..." aria-label="Rechercher" />
+  </div>
+  <!-- ActionsBar -->
+  <div class="header-actions">
+    <!-- Notifications badge -->
+    <button
+      mat-icon-button
+      [matBadge]="0"
+      matBadgeColor="warn"
+      [matBadgeHidden]="true"
+      matTooltip="Notifications"
+      aria-label="Notifications"
+    >
+      <mat-icon>circle_notifications</mat-icon>
+    </button>
+
+    <!-- User avatar -->
+    <button
+      mat-icon-button
+      routerLink="/settings"
+      matTooltip="Profil & paramètres"
+      aria-label="Profil"
+      class="avatar-btn"
+    >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</header>

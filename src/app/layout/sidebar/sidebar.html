@@ -1,1 +1,20 @@
-<p>sidebar works!</p>
+<nav class="sidebar" aria-label="Navigation principale">
+  <ul class="nav-list">
+    @for (item of navItems; track item.path) {
+      <li>
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          class="nav-item"
+          [matTooltip]="item.label"
+          matTooltipPosition="right"
+          matRipple
+          [attr.aria-label]="item.label"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

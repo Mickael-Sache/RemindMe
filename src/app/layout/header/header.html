@@ -33,5 +33,12 @@
     >
       <mat-icon>account_circle</mat-icon>
     </button>
+
+    <!-- Toggle Dark/Light -->
+    <button mat-icon-button (click)="themeService.toggleTheme()">
+      <mat-icon>
+        {{ themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}
+      </mat-icon>
+    </button>
   </div>
 </header>

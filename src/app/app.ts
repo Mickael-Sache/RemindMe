@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from '@core/services/theme.service';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +10,14 @@ import { ThemeService } from '@core/services/theme.service';
   template: `
     <router-outlet />
   `,
-  //templateUrl: './app.html',
-  //styleUrl: './app.scss',
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('remindme');
   themeService = inject(ThemeService);
+  storageService = inject(StorageService);
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.storageService.initializeDefaults();
     this.themeService.applyStoredTheme();
   }
 }

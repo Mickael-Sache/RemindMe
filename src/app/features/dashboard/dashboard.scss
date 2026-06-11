@@ -1,0 +1,9 @@
+.categories-grid {
+  display: grid;
+  grid-template-columns: repreat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}

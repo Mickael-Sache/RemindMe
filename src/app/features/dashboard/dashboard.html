@@ -1,1 +1,50 @@
-<p>dashboard works!</p>
+<!-- Remind banner -->
+@if (overdueActivities().length || dueTodayActivities().length) {
+  <section class="urgent-banner">
+    @if (overdueActivities().length) {
+      <mat-chip class="chip-overdue">🔴 {{ overdueActivities().length }} en retard</mat-chip>
+    }
+    @if (dueTodayActivities().length) {
+      <mat-chip class="chip-today">🟡 {{ dueTodayActivities().length }} aujourd'hui</mat-chip>
+    }
+    @if (dueThisWeekActivities().length) {
+      <mat-chip class="chip-today">📅 {{ dueThisWeekActivities().length }} cette semaine</mat-chip>
+    }
+  </section>
+}
+<!-- Category grid -->
+<div class="categories-grid">
+  @for (category of categories(); track category.id) {
+    <mat-card class="category-card">
+      <mat-card-header>
+        <span class="category-icon" [style.color]="category.color">
+          <mat-icon>{{ category.icon }}</mat-icon>
+        </span>
+      </mat-card-header>
+      <mat-card-title>{{ category.name }}</mat-card-title>
+
+      <mat-card-content>
+        @let catActivities = activitiesByCategory().get(category.id!) ?? [];
+
+        @if (catActivities.length === 0) {
+          <p class="empty-state">Aucune activité</p>
+        }
+
+        @for (activity of catActivities; track activity.id) {
+          <div class="activity-row" [ngClass]="getActivityClass(activity)">
+            <span class="activity-title">{{ activity.title }}</span>
+            <app-reminder-badge [activity]="activity" />
+            <button mat-icon-button (click)="markAsDone(activity)">
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<!-- Add new Activity -->
+<button mat-fab class="fab-add" color="primary" (click)="openAddActivity()">
+  <mat-icon>add</mat-icon>
+</button>

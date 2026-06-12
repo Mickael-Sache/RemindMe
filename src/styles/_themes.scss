@@ -8,6 +8,9 @@ $primary-palette: mat.define-theme(
       primary: mat.$violet-palette,
       tertiary: mat.$blue-palette,
     ),
+    density: (
+      scale: -2,
+    ),
   )
 );
 
@@ -18,15 +21,18 @@ $dark-palette: mat.define-theme(
       primary: mat.$violet-palette,
       tertiary: mat.$blue-palette,
     ),
+    density: (
+      scale: -2,
+    ),
   )
 );
 
 body.theme-light {
-  @include mat.all-component-colors($primary-palette);
+  @include mat.all-component-themes($primary-palette);
   @include mat.color-variants-backwards-compatibility($primary-palette);
 }
 
 body.theme-dark {
-  @include mat.all-component-colors($dark-palette);
+  @include mat.all-component-themes($dark-palette);
   @include mat.color-variants-backwards-compatibility($dark-palette);
 }

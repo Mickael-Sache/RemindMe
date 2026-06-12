@@ -14,7 +14,7 @@
     <!-- Notifications badge -->
     <button
       mat-icon-button
-      [matBadge]="0"
+      [matBadge]="activityService.overdueCount() || null"
       matBadgeColor="warn"
       [matBadgeHidden]="true"
       matTooltip="Notifications"

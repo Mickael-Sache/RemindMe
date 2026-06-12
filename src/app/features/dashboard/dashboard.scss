@@ -1,0 +1,314 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+}
+
+/*--------------------*/
+/* Global Material    */
+/*--------------------*/
+
+mat-card {
+  border-radius: 16px;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  line-height: 1;
+  flex: 1;
+}
+
+/*--------------------*/
+/* Dashboard Layout   */
+/*--------------------*/
+
+.dashboard-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.dashboard-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/*--------------------*/
+/* Urgent Banner      */
+/*--------------------*/
+
+.urgent-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/*--------------------*/
+/* Categories Grid    */
+/*--------------------*/
+
+.categories-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  &.grid--single {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  &.grid--double {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*--------------------*/
+/* Category Card      */
+/*--------------------*/
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-self: stretch;
+  background: var(--card-bg);
+  border-color: var(--border-color);
+
+  .category-card-title {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .category-title-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .category-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0 5px;
+    background: var(--card-alternate-bg);
+    color: var(--text-primary);
+  }
+
+  // Hide edit button by default, show on hover
+  .edit-category-btn {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover .edit-category-btn {
+    opacity: 1;
+  }
+
+  // Force Material card content to flex column
+  ::ng-deep .mat-mdc-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+  }
+
+  .btn-add-activity {
+    margin-top: auto;
+    color: var(--text-primary);
+    width: 100%;
+  }
+}
+
+/*--------------------*/
+/* Activity Card      */
+/*--------------------*/
+
+.activity-card {
+  margin-bottom: 0.5rem;
+  background: var(--card-alternate-bg);
+  border-color: var(--border-color);
+
+  mat-card-subtitle {
+    margin-left: 0.5rem;
+    color: var(--text-disabled);
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  .activity-card-title {
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  .edit-activity-btn {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover .edit-activity-btn {
+    opacity: 1;
+  }
+}
+
+.activity-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+
+  .btn-done {
+    color: var(--status-ok) !important;
+    border-color: var(--status-ok) !important;
+    border-radius: 12px !important;
+    font-size: 0.75rem;
+    padding: 0 12px;
+    height: 28px;
+    line-height: 28px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+  }
+
+  .btn-done--completed {
+    color: var(--text-disabled) !important;
+    border-color: var(--text-disabled) !important;
+    opacity: 0.6;
+  }
+}
+
+.activity-empty-state {
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+  text-align: center;
+  padding: 0.75rem 0;
+  margin: 0;
+}
+
+/*--------------------*/
+/* Aside              */
+/*--------------------*/
+
+.dashboard-sidebar {
+  width: 180px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  h3 {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.drag-mode-active {
+  color: var(--status-ok) !important;
+}
+
+/*--------------------*/
+/* Category Chips     */
+/*--------------------*/
+
+.chip-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 30px;
+
+  mat-chip {
+    flex: 1;
+  }
+}
+
+.chip-controls {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.btn-reorder {
+  width: 100%;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+
+  &.drag-mode-active {
+    color: var(--status-ok);
+  }
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.chip--draggable {
+  cursor: grab !important;
+
+  &:active {
+    cursor: grabbing !important;
+  }
+}
+
+.chip--empty {
+  opacity: 0.4;
+}
+
+.chip--active {
+  background: var(--color-primary-light) !important;
+  font-weight: 600;
+}
+
+/*--------------------*/
+/* FAB Container      */
+/*--------------------*/
+
+.fab-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}

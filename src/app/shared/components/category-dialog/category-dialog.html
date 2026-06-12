@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ data.category ? 'Modifier' : 'Nouvelle' }} catégorie</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width category-form-title">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="name" maxlength="30" />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Le nom est obligatoire</mat-error>
+      }
+      @if (form.controls.name.hasError('maxlength')) {
+        <mat-error>30 caractères maximum</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Icon selector -->
+    <div class="field-section">
+      <span class="field-label">Icône</span>
+      <div class="icon-grid">
+        @for (icon of iconOptions; track icon) {
+          <button
+            type="button"
+            mat-icon-button
+            [class.selected]="form.value.icon === icon"
+            (click)="form.patchValue({ icon })"
+          >
+            <mat-icon>{{ icon }}</mat-icon>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Color selector -->
+    <div class="field-section">
+      <span class="field-label">Couleur</span>
+      <div class="color-grid">
+        @for (color of colorOptions; track color) {
+          <button
+            type="button"
+            class="color-swatch"
+            [style.background]="color"
+            [class.selected]="form.value.color === color"
+            (click)="form.patchValue({ color })"
+          >
+            &nbsp;
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<!-- Save/Cancel ActionsButton -->
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
+    Enregistrer
+  </button>
+</mat-dialog-actions>

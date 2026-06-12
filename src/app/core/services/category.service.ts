@@ -11,7 +11,7 @@ export class CategoryService {
   // CRUD - Read
   async loadAll(): Promise<void> {
     const data = await remindmeDB.categories.orderBy('order').toArray();
-    this.categories.set(data);
+    this.categories.set(data.sort((a, b) => (a.order ?? 999) - (b.order ?? 999)));
   }
 
   // CRUD - Create
@@ -30,5 +30,23 @@ export class CategoryService {
   async delete(id: number): Promise<void> {
     await remindmeDB.categories.delete(id);
     this.categories.update(list => list.filter(c => c.id !== id));
+  }
+
+  // Update order for Activity
+  async reorder(orderedIds: number[]): Promise<void> {
+    // Update order for each categories
+    const updates = orderedIds.map((id, index) =>
+      remindmeDB.categories.update(id, { order: index })
+    );
+    await Promise.all(updates);
+
+    // Update Signal with new order
+    this.categories.update(list =>
+      [...list].sort((a, b) => {
+        const orderA = orderedIds.indexOf(a.id!);
+        const orderB = orderedIds.indexOf(b.id!);
+        return orderA - orderB;
+      })
+    );
   }
 }

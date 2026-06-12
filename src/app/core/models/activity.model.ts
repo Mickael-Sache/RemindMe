@@ -4,5 +4,6 @@ export interface Activity {
   title: string;
   description?: string;
   lastDoneAt: string;
+  lastMarkedDoneAt?: string;
   cycleInDays: number;
 }

@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>{{ data.activity ? 'Modifier' : 'Nouvelle' }} activité</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="activity-form">
+    <!-- Title -->
+    <mat-form-field appearance="outline" class="full-width activity-form-title">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="title" />
+      @if (form.controls.title.hasError('required')) {
+        <mat-error>Le titre est obligatoire</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description (optionnel)</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <!-- Category -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Catégorie</mat-label>
+      <mat-select formControlName="categoryId">
+        @for (cat of categoryService.categories(); track cat.id) {
+          <mat-option [value]="cat.id">
+            <mat-icon [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+            {{ cat.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- LastDoneAt -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Dernière réalisation</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="lastDoneAt" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Repetition Cycle -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Répéter</mat-label>
+      <mat-select formControlName="cycleInDays">
+        @for (opt of cycleOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<!-- Save/Cancel ActionsButton -->
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
+    Enregistrer
+  </button>
+</mat-dialog-actions>

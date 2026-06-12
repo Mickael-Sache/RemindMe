@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemeService } from '@core/services/theme.service';
+import { ActivityService } from '@core/services/activity.service';
 
 @Component({
   selector: 'app-header',
@@ -16,4 +17,5 @@ import { ThemeService } from '@core/services/theme.service';
 export class Header {
   // Inject ThemeService into header
   themeService = inject(ThemeService);
+  activityService = inject(ActivityService);
 }

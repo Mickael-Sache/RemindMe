@@ -17,7 +17,7 @@ export class App implements OnInit {
   storageService = inject(StorageService);
 
   async ngOnInit(): Promise<void> {
-    await this.storageService.initializeDefaults();
     this.themeService.applyStoredTheme();
+    await this.storageService.initializeDefaults();
   }
 }

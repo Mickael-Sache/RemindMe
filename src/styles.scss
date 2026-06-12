@@ -5,11 +5,13 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
-@use 'styles/themes' as *; // Theme Material M3
+@use 'styles/themes' as *; // Theme Material
 @use 'styles/variables' as *; // Variable CSS Customs
+@use 'styles/tokens'; // Customs variable
 
 // Include base style from Material once
 @include mat.core();
+@include mat.all-component-themes($primary-palette);
 @include mat.all-component-typographies();
 
 // Reset global style
@@ -45,4 +47,11 @@ body {
   transition:
     background-color 200ms ease,
     color 200ms ease;
+}
+
+.badge mat-icon {
+  font-size: var(--icon-status-size) !important;
+  width: var(--icon-status-size) !important;
+  height: var(--icon-status-size) !important;
+  line-height: var(--icon-status-size) !important;
 }

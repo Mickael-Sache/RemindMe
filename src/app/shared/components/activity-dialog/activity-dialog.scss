@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  min-width: 440px;
+}
+
+mat-dialog-content,
+.mat-mdc-dialog-content {
+  display: block;
+  padding-top: 1rem;
+}
+
+.activity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .activity-form-title {
+    margin-top: 1rem;
+  }
+
+  mat-form-field,
+  .mat-mdc-form-field {
+    width: 100%;
+    display: block;
+  }
+}

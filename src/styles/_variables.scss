@@ -3,17 +3,18 @@ body.theme-light {
   // Background
   --app-bg: #f4f5f7;
   --card-bg: #ffffff;
+  --card-alternate-bg: #eceef2;
   --sidebar-bg: #ffffff;
   --header-bg: #ffffff;
 
   // Text color
   --text-primary: #1a1d23;
   --text-secondary: #5f6672;
-  --text-disabled: #b0b5bf;
+  --text-disabled: #7a8494;
 
   // Border color
-  --border-color: #e2e5eb;
-  --divider-color: #f0f2f5;
+  --border-color: #b8bdc7;
+  --divider-color: #e8eaed;
 
   // Status background
   --status-overdue-bg: oklch(0.95 0.04 25);
@@ -26,7 +27,7 @@ body.theme-light {
   --status-ok: oklch(0.65 0.13 155);
 
   // Shadow drop
-  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 // -- DARK Theme
@@ -34,6 +35,7 @@ body.theme-dark {
   // Background
   --app-bg: #14161c;
   --card-bg: #1e2228;
+  --card-alternate-bg: #1a1d23;
   --sidebar-bg: #1a1d23;
   --header-bg: #1a1d23;
 

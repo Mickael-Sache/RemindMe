@@ -1,8 +1,9 @@
-🇫🇷 Français | [🇬🇧 English](README.en.md)
+[🇫🇷 Français](README.md) | 🇬🇧 English
 
 # RemindMe
 
-![CI](https://github.com/Mickael-Sache/RemindMe/actions/workflows/ci.yml/badge.svg)
+<!-- ![CI](https://github.com/Mickael-Sache/RemindMe/actions/workflows/ci.yml/badge.svg) -->
+
 ![Angular](https://img.shields.io/badge/Angular-17+-dd0031?logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white)
 ![Angular Material](https://img.shields.io/badge/Angular_Material-M3-757575?logo=material-design&logoColor=white)
@@ -15,7 +16,8 @@
 
 <!-- Replace with a screenshot or GIF of the dashboard -->
 
-![RemindMe Dashboard](docs/screenshots/dashboard-dark.png)
+![RemindMe Dashboard Dark](docs/screenshots/dashboard-dark.png)
+![RemindMe Dashboard Light](docs/screenshots/dashboard-light.png)
 
 ---
 

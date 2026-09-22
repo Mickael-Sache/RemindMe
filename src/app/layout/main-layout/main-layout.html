@@ -3,7 +3,7 @@
 
   <div class="layout-body">
     <!-- Sidebar only for Desktop -->
-    @if (!(isMobile$ | async)) {
+    @if ((isMobile$ | async) === false) {
       <app-sidebar />
     }
 

@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '@core/services/category.service';
 import { Category } from '@core/models/category.model';
-import { DialogRef } from '@angular/cdk/dialog';
 
 export const ICON_OPTIONS = [
   'directions_car',
@@ -47,7 +46,7 @@ export const COLOR_OPTIONS = [
 export class CategoryDialog {
   private formBuilder = inject(FormBuilder);
   private categoryService = inject(CategoryService);
-  private dialogRef = inject(DialogRef);
+  private dialogRef = inject(MatDialogRef);
   data: { category?: Category } = inject(MAT_DIALOG_DATA);
 
   iconOptions = ICON_OPTIONS;

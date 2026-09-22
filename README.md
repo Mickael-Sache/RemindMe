@@ -1,4 +1,4 @@
-[🇫🇷 Français](README.md) | 🇬🇧 English
+🇫🇷 Français | [🇬🇧 English](README.en.md)
 
 # RemindMe
 
@@ -15,7 +15,8 @@
 
 <!-- Remplacer par un screenshot ou un GIF du dashboard -->
 
-![Dashboard RemindMe](docs/screenshots/dashboard-dark.png)
+![RemindMe Dashboard Dark](docs/screenshots/dashboard-dark.png)
+![RemindMe Dashboard Light](docs/screenshots/dashboard-light.png)
 
 ---
 

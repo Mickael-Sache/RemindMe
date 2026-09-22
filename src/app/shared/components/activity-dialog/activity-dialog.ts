@@ -49,8 +49,8 @@ export class ActivityDialog {
   data: { activity?: Activity; preselectedCategoryId?: number } = inject(MAT_DIALOG_DATA);
 
   form = this.formBuilder.group({
-    title: ['', [Validators.required, Validators.maxLength(30)]],
-    description: [''],
+    title: [this.data.activity?.title ?? '', [Validators.required, Validators.maxLength(30)]],
+    description: [this.data.activity?.description ?? ''],
     categoryId: [
       this.data.activity?.categoryId ?? this.data.preselectedCategoryId ?? null,
       Validators.required,

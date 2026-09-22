@@ -14,6 +14,11 @@
 @include mat.all-component-themes($primary-palette);
 @include mat.all-component-typographies();
 
+// Global Material overrides
+mat-card {
+  border-radius: 16px !important;
+}
+
 // Reset global style
 *,
 *::before,

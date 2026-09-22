@@ -1,0 +1,47 @@
+.activity-card {
+  margin-bottom: 0.5rem;
+  background: var(--card-alternate-bg);
+  border-color: var(--border-color);
+
+  mat-card-subtitle {
+    margin-left: 0.5rem;
+    color: var(--text-disabled);
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  .activity-card-title {
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+}
+
+.activity-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+
+  .btn-done {
+    color: var(--status-ok) !important;
+    border-color: var(--status-ok) !important;
+    border-radius: 12px !important;
+    font-size: 0.75rem;
+    padding: 0 12px;
+    height: 28px;
+    line-height: 28px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+  }
+
+  .btn-done--completed {
+    color: var(--text-disabled) !important;
+    border-color: var(--text-disabled) !important;
+    opacity: 0.6;
+  }
+}

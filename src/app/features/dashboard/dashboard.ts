@@ -1,18 +1,16 @@
 import { Component, inject, computed, OnInit, signal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivityService } from '@core/services/activity.service';
 import { CategoryService } from '@core/services/category.service';
-import { NotificationService } from '@core/services/notification.service';
 import { ReminderService } from '@core/services/reminder.service';
 import { Activity } from '@core/models/activity.model';
 import { Category } from '@core/models/category.model';
-import { ReminderBadge } from '@shared/components/reminder-badge/reminder-badge';
+import { ActivityGrid } from './components/activity-grid/activity-grid';
+import { CategorySidebar } from './components/category-sidebar/category-sidebar';
 import { ActivityDialog } from '@shared/components/activity-dialog/activity-dialog';
 import { CategoryDialog } from '@shared/components/category-dialog/category-dialog';
 
@@ -20,14 +18,12 @@ import { CategoryDialog } from '@shared/components/category-dialog/category-dial
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    MatCardModule,
     MatChipsModule,
     MatButtonModule,
-    MatSnackBarModule,
-    MatIconButton,
     MatIconModule,
-    MatBadgeModule,
-    ReminderBadge,
+    MatSnackBarModule,
+    ActivityGrid,
+    CategorySidebar,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
@@ -37,39 +33,36 @@ export class Dashboard implements OnInit {
 
   private activityService = inject(ActivityService);
   private categoryService = inject(CategoryService);
-  private notificationService = inject(NotificationService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private reminderService = inject(ReminderService);
 
   //#endregion
 
   //#region Public variables
 
-  reminderService = inject(ReminderService);
   categories = this.categoryService.categories;
   activities = this.activityService.activities;
 
   //#endregion
 
   //#region Signal variables
-  isDragMode = signal<boolean>(false);
+
   hiddenCategoryIds = signal<Set<number>>(new Set());
   shownEmptyCategoryIds = signal<Set<number>>(new Set());
+
   //#endregion
 
   //#region Computed variables
 
-  // Get activities overdue (days < 0)
   overdueActivities = computed(() =>
     this.activities().filter(a => this.reminderService.daysUntilDue(a) < 0)
   );
 
-  // Get activities to realize as today (days === 0)
   dueTodayActivities = computed(() =>
     this.activities().filter(a => this.reminderService.daysUntilDue(a) === 0)
   );
 
-  // Get activities scheduled this week (days >= 1 & days <= 7)
   dueThisWeekActivities = computed(() =>
     this.activities().filter(a => {
       const days = this.reminderService.daysUntilDue(a);
@@ -77,7 +70,6 @@ export class Dashboard implements OnInit {
     })
   );
 
-  // Get activities by category
   activitiesByCategory = computed(() => {
     const map = new Map<number, Activity[]>();
     for (const cat of this.categories()) {
@@ -90,7 +82,6 @@ export class Dashboard implements OnInit {
     return map;
   });
 
-  // Count activity by Category
   activityCountByCategory = computed(() => {
     const map = new Map<number, number>();
     for (const cat of this.categories()) {
@@ -100,14 +91,6 @@ export class Dashboard implements OnInit {
     return map;
   });
 
-  // Filter Category with atleast one activities
-  categoriesWithActivities = computed(() =>
-    this.categories().filter(
-      c => c.id !== undefined && (this.activitiesByCategory().get(c.id)?.length ?? 0) > 0
-    )
-  );
-
-  // Filter Category by selection
   filteredCategories = computed(() => {
     const hidden = this.hiddenCategoryIds();
     const shownEmpty = this.shownEmptyCategoryIds();
@@ -115,9 +98,8 @@ export class Dashboard implements OnInit {
     return this.categories().filter(c => {
       if (c.id === undefined) return false;
       const hasActivities = (this.activitiesByCategory().get(c.id)?.length ?? 0) > 0;
-
-      if (hasActivities) return !hidden.has(c.id); // Showed only if not hidden
-      return shownEmpty.has(c.id); // Showed only if selected
+      if (hasActivities) return !hidden.has(c.id);
+      return shownEmpty.has(c.id);
     });
   });
 
@@ -125,31 +107,8 @@ export class Dashboard implements OnInit {
 
   //#region Public methods
 
-  // Toggle drag mode for ordering category
-  toggleDragMode(): void {
-    this.isDragMode.set(!this.isDragMode());
-  }
-
-  // MoveUp Category
-  async moveCategoryUp(index: number): Promise<void> {
-    if (index === 0) return;
-    const reordered = [...this.categories()];
-    [reordered[index - 1], reordered[index]] = [reordered[index], reordered[index - 1]];
-    this.categoryService.categories.set([...reordered]);
-    await this.categoryService.reorder(reordered.filter(c => c.id !== undefined).map(c => c.id!));
-  }
-
-  // ModeDown Category
-  async moveCategoryDown(index: number): Promise<void> {
-    if (index === this.categories().length - 1) return;
-    const reordered = [...this.categories()];
-    [reordered[index], reordered[index + 1]] = [reordered[index + 1], reordered[index]];
-    this.categoryService.categories.set([...reordered]);
-    await this.categoryService.reorder(reordered.filter(c => c.id !== undefined).map(c => c.id!));
-  }
-
   // Toggle filter on Category
-  toggleCategoryFilter(categoryId: number): void {
+  onFilterToggled(categoryId: number): void {
     const hasActivities = (this.activitiesByCategory().get(categoryId)?.length ?? 0) > 0;
 
     if (hasActivities) {
@@ -175,35 +134,12 @@ export class Dashboard implements OnInit {
     }
   }
 
-  // Check if Category is visible
-  isCategoryVisible(categoryId: number): boolean {
-    const hasActivities = (this.activitiesByCategory().get(categoryId)?.length ?? 0) > 0;
-    if (hasActivities) return !this.hiddenCategoryIds().has(categoryId);
-    return this.shownEmptyCategoryIds().has(categoryId);
-  }
-
-  // Get Cycle in days per Activity
-  getActivityCycleDays(activity: Activity): string {
-    return this.reminderService.getCycleLabel(activity);
-  }
-
-  // Get class associated with number of remaining days for an activities
-  getActivityClass(activity: Activity): string {
-    const days = this.reminderService.daysUntilDue(activity);
-    if (days < 0) return 'activity-overdue';
-    if (days <= 2) return 'activity-urgent';
-    return '';
-  }
-
   // Open dialog and Add Activity
   openAddActivity(): void {
-    this.dialog.open(ActivityDialog, {
-      data: {},
-      width: '480px',
-    });
+    this.dialog.open(ActivityDialog, { data: {}, width: '480px' });
   }
 
-  // Open dialog and add activity directly in category's card
+  // Open dialog and add activity in a specific category
   openAddActivityInCategory(category: Category): void {
     this.dialog.open(ActivityDialog, {
       data: { preselectedCategoryId: category.id },
@@ -226,14 +162,13 @@ export class Dashboard implements OnInit {
     this.dialog.open(CategoryDialog, { data: { category }, width: '480px' });
   }
 
-  // Mark an activity as done
+  // Mark an activity as done with undo snackbar
   async markAsDone(activity: Activity): Promise<void> {
     if (activity.id === undefined) return;
 
     const previousDate = activity.lastDoneAt;
-    const previousMarkedDate = activity.lastMarkedDoneAt; // ← capturer avant modification
+    const previousMarkedDate = activity.lastMarkedDoneAt;
 
-    // Mark current activity as done
     await this.activityService.markAsDone(activity.id);
 
     const snackRef = this.snackBar.open('Activité marquée comme faite', 'Annuler', {
@@ -242,7 +177,6 @@ export class Dashboard implements OnInit {
       verticalPosition: 'top',
     });
 
-    // Undo validation as done
     snackRef.onAction().subscribe(async () => {
       await this.activityService.undoMarkAsDone(activity.id!, previousDate, previousMarkedDate);
     });
@@ -251,9 +185,7 @@ export class Dashboard implements OnInit {
   //#endregion
 
   async ngOnInit() {
-    // Wait for Activity to load
     await this.activityService.loadAll();
-    // Wait for Category to load
     await this.categoryService.loadAll();
   }
 }

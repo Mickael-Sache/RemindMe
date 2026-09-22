@@ -1,0 +1,46 @@
+<div
+  class="activity-grid"
+  [class.grid--single]="categories.length === 1"
+  [class.grid--double]="categories.length === 2"
+>
+  @for (category of categories; track category.id) {
+    <mat-card appearance="outlined" class="category-card">
+      <mat-card-header>
+        <mat-card-title class="category-card-title">
+          <app-category-badge [category]="category" size="small" />
+          <span class="category-title-wrapper">
+            {{ category.name }}
+            <span class="category-count">
+              {{ activityCountByCategory.get(category.id!) ?? 0 }}
+            </span>
+          </span>
+        </mat-card-title>
+
+        <button mat-icon-button class="edit-category-btn" (click)="editCategory.emit(category)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-card-header>
+
+      <mat-card-content>
+        @let catActivities = activitiesByCategory.get(category.id!) ?? [];
+
+        @if (catActivities.length === 0) {
+          <p class="activity-empty-state">Aucune activité</p>
+        }
+
+        @for (activity of catActivities; track activity.id) {
+          <app-activity-card
+            [activity]="activity"
+            (edit)="editActivity.emit($event)"
+            (markDone)="markActivityDone.emit($event)"
+          />
+        }
+
+        <button matButton="outlined" class="btn-add-activity" (click)="addActivity.emit(category)">
+          <mat-icon>add</mat-icon>
+          Ajouter
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

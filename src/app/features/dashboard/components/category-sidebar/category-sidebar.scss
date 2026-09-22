@@ -1,0 +1,80 @@
+.category-sidebar {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  h3 {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.drag-mode-active {
+  color: var(--status-ok) !important;
+}
+
+.category-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.chip-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 25px;
+
+  mat-chip {
+    flex: 1;
+  }
+}
+
+.chip-controls {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.chip--active {
+  background: var(--color-primary-light) !important;
+  font-weight: 600;
+}
+.chip--empty {
+  opacity: 0.4;
+}
+
+.btn-reorder {
+  width: 100%;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+}

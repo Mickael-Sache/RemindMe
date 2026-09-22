@@ -1,0 +1,28 @@
+<mat-card appearance="outlined" class="activity-card">
+  <mat-card-header (click)="edit.emit(activity)">
+    <mat-card-title class="activity-card-title">
+      {{ activity.title }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ reminderService.getCycleLabel(activity) }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="activity-card-footer">
+      <app-reminder-badge [activity]="activity" />
+      <button
+        mat-stroked-button
+        class="btn-done"
+        [class.btn-done--completed]="reminderService.isDoneToday(activity)"
+        [disabled]="reminderService.isDoneToday(activity)"
+        (click)="markDone.emit(activity)"
+      >
+        <mat-icon>
+          {{ reminderService.isDoneToday(activity) ? 'check_circle' : 'check' }}
+        </mat-icon>
+        {{ reminderService.isDoneToday(activity) ? 'Réalisé' : 'Fait' }}
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -4,7 +4,6 @@
     @if (
       overdueActivities().length || dueTodayActivities().length || dueThisWeekActivities().length
     ) {
-      <!-- Section Title -->
       <h3>Prochains rappels</h3>
       <section class="urgent-banner">
         @if (overdueActivities().length) {
@@ -20,145 +19,35 @@
         }
       </section>
     }
+
     <!-- Section Activities -->
     <h3>Mes activités</h3>
-    <!-- Category grid -->
-    <div
-      class="categories-grid"
-      [class.grid--single]="filteredCategories().length === 1"
-      [class.grid--double]="filteredCategories().length === 2"
-    >
-      @for (category of filteredCategories(); track category.id) {
-        <!-- Card for Category -->
-        <mat-card appearance="outlined" class="category-card">
-          <mat-card-header>
-            <mat-card-title class="category-card-title">
-              <span class="category-icon" [style.color]="category.color">
-                <mat-icon>{{ category.icon }}</mat-icon>
-              </span>
-              <span class="category-title-wrapper">
-                {{ category.name }}
-                <span class="category-count">
-                  {{ activityCountByCategory().get(category.id!) ?? 0 }}
-                </span>
-              </span>
-            </mat-card-title>
-
-            <!-- Edit Category -->
-            <button mat-icon-button class="edit-category-btn" (click)="openEditCategory(category)">
-              <mat-icon>edit</mat-icon>
-            </button>
-          </mat-card-header>
-
-          <!-- Card for Activity -->
-          <mat-card-content>
-            @let catActivities = activitiesByCategory().get(category.id!) ?? [];
-
-            @if (catActivities.length === 0) {
-              <p class="activity-empty-state">Aucune activité</p>
-            }
-
-            @for (activity of catActivities; track activity.id) {
-              <mat-card appearance="outlined" class="activity-card">
-                <mat-card-header (click)="openEditActivity(activity)">
-                  <mat-card-title class="activity-card-title">
-                    {{ activity.title }}
-                  </mat-card-title>
-                  <mat-card-subtitle>{{ getActivityCycleDays(activity) }}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                  <div class="activity-card-footer">
-                    <app-reminder-badge [activity]="activity" />
-                    <button
-                      mat-stroked-button
-                      class="btn-done"
-                      [class.btn-done--completed]="reminderService.isDoneToday(activity)"
-                      [disabled]="reminderService.isDoneToday(activity)"
-                      (click)="markAsDone(activity)"
-                    >
-                      <mat-icon>
-                        {{ reminderService.isDoneToday(activity) ? 'check_circle' : 'check' }}
-                      </mat-icon>
-                      {{ reminderService.isDoneToday(activity) ? 'Réalisé' : 'Fait' }}
-                    </button>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            }
-            <!-- Add new Activity with Category -->
-            <button
-              matButton="outlined"
-              class="btn-add-activity"
-              (click)="openAddActivityInCategory(category)"
-              aria-label="Ajouter une activité"
-            >
-              <mat-icon>add</mat-icon>
-              Ajouter
-            </button>
-          </mat-card-content>
-        </mat-card>
-      }
-    </div>
+    <app-activity-grid
+      [categories]="filteredCategories()"
+      [activitiesByCategory]="activitiesByCategory()"
+      [activityCountByCategory]="activityCountByCategory()"
+      (editCategory)="openEditCategory($event)"
+      (addActivity)="openAddActivityInCategory($event)"
+      (editActivity)="openEditActivity($event)"
+      (markActivityDone)="markAsDone($event)"
+    />
   </div>
-  <!-- Section Aside -->
-  <aside class="dashboard-sidebar">
-    <div class="sidebar-header">
-      <!-- Section Title -->
-      <h3>Catégories</h3>
-    </div>
 
-    <!-- Chip for filtering/organizing categories -->
-    <div class="category-chips">
-      @for (category of categories(); track category.id; let i = $index) {
-        <div class="chip-row">
-          @if (isDragMode()) {
-            <div class="chip-controls">
-              <!-- Move Category UP -->
-              <button mat-icon-button [disabled]="i === 0" (click)="moveCategoryUp(i)">
-                <mat-icon>arrow_upward</mat-icon>
-              </button>
-              <!-- Move Category DOWN -->
-              <button
-                mat-icon-button
-                [disabled]="i === categories().length - 1"
-                (click)="moveCategoryDown(i)"
-              >
-                <mat-icon>arrow_downward</mat-icon>
-              </button>
-            </div>
-          }
-          <!-- Chip for each Category -->
-          <mat-chip
-            [class.chip--active]="isCategoryVisible(category.id!)"
-            [class.chip--empty]="(activityCountByCategory().get(category.id!) ?? 0) === 0"
-            (click)="!isDragMode() && toggleCategoryFilter(category.id!)"
-          >
-            <span class="chip-dot" [style.background]="category.color"></span>
-            {{ category.name }}
-          </mat-chip>
-        </div>
-      }
-    </div>
-    <!-- Drag mode's button -->
-    <button
-      mat-button
-      class="btn-reorder"
-      (click)="toggleDragMode()"
-      [class.drag-mode-active]="isDragMode()"
-    >
-      <mat-icon>{{ isDragMode() ? 'check' : 'swap_vert' }}</mat-icon>
-      {{ isDragMode() ? 'Terminer' : 'Réorganiser' }}
-    </button>
-  </aside>
+  <!-- Section Sidebar -->
+  <app-category-sidebar
+    [categories]="categories()"
+    [activityCountByCategory]="activityCountByCategory()"
+    [hiddenCategoryIds]="hiddenCategoryIds()"
+    [shownEmptyCategoryIds]="shownEmptyCategoryIds()"
+    (filterToggled)="onFilterToggled($event)"
+  />
 </div>
 
-<!-- Section FAB container -->
+<!-- Section FAB -->
 <div class="fab-container">
-  <!-- New Category's button -->
   <button mat-mini-fab color="accent" (click)="openAddCategory()">
     <mat-icon>create_new_folder</mat-icon>
   </button>
-  <!-- New Activity's button -->
   <button mat-mini-fab color="primary" (click)="openAddActivity()">
     <mat-icon>add</mat-icon>
   </button>

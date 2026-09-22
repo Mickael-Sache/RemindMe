@@ -1,0 +1,45 @@
+<aside class="category-sidebar">
+  <div class="sidebar-header">
+    <h3>Catégories</h3>
+  </div>
+
+  <div class="category-chips">
+    @for (category of categories; track category.id; let i = $index) {
+      <div class="chip-row">
+        @if (isDragMode()) {
+          <div class="chip-controls">
+            <button mat-icon-button [disabled]="i === 0" (click)="moveCategoryUp(i)">
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              [disabled]="i === categories.length - 1"
+              (click)="moveCategoryDown(i)"
+            >
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+          </div>
+        }
+
+        <mat-chip
+          [class.chip--active]="isCategoryVisible(category.id!)"
+          [class.chip--empty]="(activityCountByCategory.get(category.id!) ?? 0) === 0"
+          (click)="!isDragMode() && filterToggled.emit(category.id!)"
+        >
+          <span class="chip-dot" [style.background]="category.color"></span>
+          {{ category.name }}
+        </mat-chip>
+      </div>
+    }
+  </div>
+
+  <button
+    mat-button
+    class="btn-reorder"
+    [class.drag-mode-active]="isDragMode()"
+    (click)="toggleDragMode()"
+  >
+    <mat-icon>{{ isDragMode() ? 'check' : 'swap_vert' }}</mat-icon>
+    {{ isDragMode() ? 'Terminer' : 'Réorganiser' }}
+  </button>
+</aside>

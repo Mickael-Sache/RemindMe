@@ -1,0 +1,34 @@
+.day-activities-panel {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.panel-section {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.panel-header {
+  margin-bottom: 0.75rem;
+
+  h3 {
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.empty-state {
+  color: var(--text-disabled);
+  font-size: 0.85rem;
+}

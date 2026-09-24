@@ -1,0 +1,135 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+}
+
+/*--------------------*/
+/* Calendar Layout    */
+/*--------------------*/
+
+.calendar-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.calendar-main {
+  flex: 1;
+  min-width: 0;
+}
+
+:host ::ng-deep .mat-calendar-table {
+  border-collapse: separate;
+  border-spacing: 6px;
+}
+
+/*--------------------*/
+/* Cell base style     */
+/*--------------------*/
+
+:host ::ng-deep .mat-calendar-body-cell {
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  background: var(--card-alternate-bg);
+}
+
+:host ::ng-deep .mat-calendar-body-cell-content {
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-radius: var(--card-radius);
+
+  line-height: 2;
+  text-indent: 5px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+:host ::ng-deep .mat-calendar-body-cell-container {
+  position: relative;
+}
+
+/*--------------------*/
+/* Selection / hover   */
+/*--------------------*/
+
+:host ::ng-deep .mat-calendar-body-selected.mat-calendar-body-today {
+  box-shadow: none;
+  color: var(--status-overdue);
+}
+
+:host ::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  box-shadow: inset 0 0 0 1px transparent;
+  border-color: transparent !important;
+  color: var(--status-overdue);
+}
+
+:host ::ng-deep .mat-calendar-body-selected {
+  background-color: var(--text-disabled);
+  color: var(--text-primary);
+}
+
+:host
+  ::ng-deep
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+  background-color: var(--card-alternate-bg);
+  border-radius: var(--card-radius);
+}
+
+/*--------------------*/
+/* Overdue signaling   */
+/*--------------------*/
+
+// :host
+//   ::ng-deep
+//   .mat-calendar-body-cell-container:has(> .mat-calendar-body-cell.calendar-day--overdue) {
+//   border: 2px solid var(--status-overdue);
+//   border-radius: var(--card-radius);
+// }
+
+:host
+  ::ng-deep
+  .mat-calendar-body-cell-container:has(> .mat-calendar-body-cell.calendar-day--overdue)::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: var(--icon-status-size);
+  height: var(--icon-status-size);
+  border-radius: 50%;
+  background: var(--status-overdue);
+  z-index: 2;
+}
+
+/*--------------------*/
+/* Category legend     */
+/*--------------------*/
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+  display: inline-block;
+}

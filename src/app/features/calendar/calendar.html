@@ -21,6 +21,8 @@
   <app-day-activities-panel
     [todayActivities]="todayActivities()"
     [upcomingActivities]="upcomingActivities()"
+    [todayLabel]="selectedDate()"
+    (edit)="openActivityDetails($event)"
     (markDone)="markAsDone($event)"
   />
 </div>

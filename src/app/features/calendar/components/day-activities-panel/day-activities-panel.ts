@@ -15,5 +15,6 @@ export class DayActivitiesPanel {
   @Input({ required: true }) todayActivities!: Activity[];
   @Input({ required: true }) upcomingActivities!: Activity[];
   @Input() todayLabel: Date = new Date();
+  @Output() edit = new EventEmitter<Activity>();
   @Output() markDone = new EventEmitter<Activity>();
 }

@@ -77,7 +77,7 @@ describe('DayActivitiesPanel', () => {
 
     const emptyStates = fixture.debugElement.queryAll(By.css('.empty-state'));
     expect(emptyStates.length).toBe(2);
-    expect(emptyStates[0].nativeElement.textContent).toContain("Aucune activité aujourd'hui");
+    expect(emptyStates[0].nativeElement.textContent).toContain('Aucune activité programmée');
     expect(emptyStates[1].nativeElement.textContent).toContain('Rien de prévu cette semaine');
   });
 });

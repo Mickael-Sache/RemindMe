@@ -9,8 +9,10 @@ import { ActivityService } from '@core/services/activity.service';
 import { ReminderService } from '@core/services/reminder.service';
 import { CategoryService } from '@core/services/category.service';
 import { Activity } from '@core/models/activity.model';
+import { ActivityDialog } from '@shared/components/activity-dialog/activity-dialog';
 import { DayActivitiesPanel } from './components/day-activities-panel/day-activities-panel';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-calendar',
@@ -22,10 +24,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class Calendar implements OnInit {
   //#region Private variables
 
+  private static readonly PROJECTION_HORIZON_DAYS = 400;
+  private static readonly PROJECTION_MAX_OCCURRENCES = 24;
+
   private activityService = inject(ActivityService);
   private reminderService = inject(ReminderService);
   private snackBar = inject(MatSnackBar);
   private sanitizer = inject(DomSanitizer);
+  private dialog = inject(MatDialog);
 
   @ViewChild(MatCalendar) private matCalendar?: MatCalendar<Date>;
 
@@ -49,15 +55,32 @@ export class Calendar implements OnInit {
 
   categoriesById = computed(() => new Map(this.categories().map(c => [c.id!, c])));
 
-  // Map<'YYYY-MM-DD', Set<categoryId>> built once per activities() change
+  // Map<'YYYY-MM-DD', Set<categoryId>> built once per activities() change.
+  // Projects future recurring occurrences per activity, bounded by both a time
+  // horizon and a max occurrence count so a short cycle can't flood the map.
   dayCategoryMap = computed(() => {
     const map = new Map<string, Set<number>>();
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const horizonEnd = new Date(today);
+    horizonEnd.setDate(horizonEnd.getDate() + Calendar.PROJECTION_HORIZON_DAYS);
+
     for (const activity of this.activities()) {
-      const key = this.toKey(this.reminderService.nextDueAt(activity));
-      const set = map.get(key) ?? new Set<number>();
-      set.add(activity.categoryId);
-      map.set(key, set);
+      if (!activity.cycleInDays || activity.cycleInDays <= 0) continue;
+
+      const anchor = this.anchorDate(activity);
+
+      for (let k = 1; k <= Calendar.PROJECTION_MAX_OCCURRENCES; k++) {
+        const occurrence = new Date(anchor);
+        occurrence.setDate(anchor.getDate() + k * activity.cycleInDays);
+        if (occurrence > horizonEnd) break;
+
+        const key = this.toKey(occurrence);
+        const set = map.get(key) ?? new Set<number>();
+        set.add(activity.categoryId);
+        map.set(key, set);
+      }
     }
 
     return map;
@@ -94,13 +117,19 @@ export class Calendar implements OnInit {
 
   hasOverdue = computed(() => this.activities().some(a => this.reminderService.isOverdue(a)));
 
-  // Activities shown in the "Aujourd'hui" section of the side panel
+  // Activities shown in the day section of the side panel, for the selected calendar day
   todayActivities = computed(() => {
-    const today = new Date();
-    return [
-      ...this.activityService.getUpcomingForDate(today),
-      ...this.activityService.getOverdueForDate(today),
-    ];
+    const selected = this.selectedDate();
+
+    if (this.isToday(selected)) {
+      const today = new Date();
+      return [
+        ...this.activityService.getUpcomingForDate(today),
+        ...this.activityService.getOverdueForDate(today),
+      ];
+    }
+
+    return this.activities().filter(a => this.isDueOn(a, selected));
   });
 
   // Activities shown in the "À venir" section of the side panel (next 7 days, same window as Dashboard)
@@ -124,6 +153,10 @@ export class Calendar implements OnInit {
   }
 
   //#region Public methods
+
+  openActivityDetails(activity: Activity): void {
+    this.dialog.open(ActivityDialog, { data: { activity }, width: '480px' });
+  }
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view !== 'month') return '';
@@ -199,6 +232,21 @@ export class Calendar implements OnInit {
 
   private isToday(date: Date): boolean {
     return this.toKey(date) === this.toKey(new Date());
+  }
+
+  private anchorDate(activity: Activity): Date {
+    const last = new Date(activity.lastDoneAt);
+    return new Date(last.getFullYear(), last.getMonth(), last.getDate());
+  }
+
+  private isDueOn(activity: Activity, date: Date): boolean {
+    if (!activity.cycleInDays || activity.cycleInDays <= 0) return false;
+
+    const anchor = this.anchorDate(activity);
+    const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((target.getTime() - anchor.getTime()) / (1000 * 60 * 60 * 24));
+
+    return diffDays > 0 && diffDays % activity.cycleInDays === 0;
   }
 
   //#endregion

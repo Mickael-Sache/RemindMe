@@ -5,11 +5,15 @@
     </div>
 
     @if (todayActivities.length === 0) {
-      <p class="empty-state">Aucune activité aujourd'hui</p>
+      <p class="empty-state">Aucune activité programmée</p>
     } @else {
       <div class="activity-list">
         @for (activity of todayActivities; track activity.id) {
-          <app-activity-card [activity]="activity" (markDone)="markDone.emit($event)" />
+          <app-activity-card
+            [activity]="activity"
+            (edit)="edit.emit($event)"
+            (markDone)="markDone.emit($event)"
+          />
         }
       </div>
     }
@@ -25,7 +29,11 @@
     } @else {
       <div class="activity-list">
         @for (activity of upcomingActivities; track activity.id) {
-          <app-activity-card [activity]="activity" (markDone)="markDone.emit($event)" />
+          <app-activity-card
+            [activity]="activity"
+            (edit)="edit.emit($event)"
+            (markDone)="markDone.emit($event)"
+          />
         }
       </div>
     }

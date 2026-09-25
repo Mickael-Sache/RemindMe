@@ -1,0 +1,41 @@
+<div class="day-activities-panel">
+  <section class="panel-section">
+    <div class="panel-header">
+      <h3>{{ todayLabel | date: 'EEEE d MMMM' }}</h3>
+    </div>
+
+    @if (todayActivities.length === 0) {
+      <p class="empty-state">Aucune activité programmée</p>
+    } @else {
+      <div class="activity-list">
+        @for (activity of todayActivities; track activity.id) {
+          <app-activity-card
+            [activity]="activity"
+            (edit)="edit.emit($event)"
+            (markDone)="markDone.emit($event)"
+          />
+        }
+      </div>
+    }
+  </section>
+
+  <section class="panel-section">
+    <div class="panel-header">
+      <h3>À venir</h3>
+    </div>
+
+    @if (upcomingActivities.length === 0) {
+      <p class="empty-state">Rien de prévu cette semaine</p>
+    } @else {
+      <div class="activity-list">
+        @for (activity of upcomingActivities; track activity.id) {
+          <app-activity-card
+            [activity]="activity"
+            (edit)="edit.emit($event)"
+            (markDone)="markDone.emit($event)"
+          />
+        }
+      </div>
+    }
+  </section>
+</div>

@@ -18,6 +18,9 @@
 ![RemindMe Dashboard Dark](docs/screenshots/dashboard-dark.png)
 ![RemindMe Dashboard Light](docs/screenshots/dashboard-light.png)
 
+![RemindMe Calendar Dark](docs/screenshots/calendar-dark.png)
+![RemindMe Calendar Light](docs/screenshots/calendar-light.png)
+
 ---
 
 ## Features
